@@ -1,7 +1,7 @@
 import random
 from turtle import update
 import pygame
-from constants import PIPE_COLOR, PIPE_HOLE_SIZE, SPEED, PIPE_WIDTH, WINDOW_GEOMETRY
+from constants import PIPE_COLOR, PIPE_HOLE_SIZE, PIPE_SPEED, PIPE_WIDTH, WINDOW_GEOMETRY
 
 class Pipe:
     x: float
@@ -19,7 +19,7 @@ class Pipe:
         pygame.draw.rect(screen, PIPE_COLOR, rect2)
     
     def update(self, delta_time: float):
-        self.x -= delta_time * SPEED
+        self.x -= delta_time * PIPE_SPEED
     
     def should_despawn(self) -> bool:
         return self.x+PIPE_WIDTH < 0

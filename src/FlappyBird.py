@@ -1,7 +1,9 @@
 import pygame
+from KeyboardHandler import KeyboardHandler
 from Pipe import Pipe
 import time
 from PipeHandler import PipeHandler
+from Player import Player
 from constants import WINDOW_GEOMETRY
 pygame.init()
 
@@ -13,24 +15,36 @@ class FlappyBird:
         pygame.display.set_caption("Flappy Bird")
         self.pipe_handler = PipeHandler()
         self.delta_time = 0
+        self.player = Player()
+        self.kb_handler = KeyboardHandler()
+        
 
-    # registers events
+    # handles events
     def update(self):
         start_time = time.perf_counter()
         pygame.time.delay(1)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
+            if event.type == pygame.KEYDOWN:
+                self.kb_handler.press(event.key)
+            if event.type == pygame.KEYUP:
+                self.kb_handler.release(event.key)
+
+   
 
         self.pipe_handler.update(self.delta_time)
-
-        end_time = time.perf_counter()
+        self.player.update(self.delta_time, self.kb_handler)
+        self.kb_handler.update()
+        print(self.player.is_dead())
+        end_time = time.perf_counter()   
         self.delta_time = end_time-start_time
         
     # renders everything on screen
     def render(self):
         self.screen.fill((84, 86, 89))
         self.pipe_handler.render(self.screen)
+        self.player.render(self.screen)
         pygame.display.flip()
 
     def is_running(self):

@@ -1,9 +1,10 @@
+from tkinter.tix import WINDOW
 from typing import List
 from Pipe import Pipe
 import pygame
 import time
 
-from constants import PIPE_SPAWN_INTERVAL
+from constants import PIPE_DISTANCE, WINDOW_GEOMETRY
 
 
 """
@@ -27,9 +28,10 @@ class PipeHandler:
             pipe.update(delta_time)
             if pipe.should_despawn():
                 del self.pipes[i]
+                print("removed pipe")
             i += 1
-        now = time.perf_counter()
-        if now-self.last_pipe_added >= PIPE_SPAWN_INTERVAL:
+        # create a new pipe if the last created one is at least PIPE_DISTANCE away from the right window border
+        if self.pipes[-1].x <= WINDOW_GEOMETRY[0]-PIPE_DISTANCE: 
             self.add_pipe()
             
         
