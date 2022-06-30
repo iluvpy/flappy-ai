@@ -37,6 +37,7 @@ class FlappyBird:
         self.player.update(self.delta_time, self.kb_handler)
         self.kb_handler.update()
         print(self.player.is_dead(self.pipe_handler))
+        self.running = not self.player.is_dead(self.pipe_handler)
         end_time = time.perf_counter()   
         self.delta_time = end_time-start_time
         
