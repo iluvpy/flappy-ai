@@ -59,12 +59,14 @@ class AiHandler:
             first = sorted_ai_players[0]
             self.start_generation(first.player_ai)
             return True
-        print(len(self.ai_players))
     
     def render(self, screen: pygame.Surface):
         for player in self.ai_players:
             player.render(screen)
-            
+    
+    def alive_ais(self) -> int:
+        return len(self.ai_players)
+    
 
 if __name__ == "__main__":
     # testing

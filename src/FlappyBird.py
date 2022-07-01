@@ -5,7 +5,7 @@ from Pipe import Pipe
 import time
 from PipeHandler import PipeHandler
 from Player import Player
-from constants import WINDOW_GEOMETRY
+from constants import BLACK, WINDOW_GEOMETRY
 pygame.init()
 
 # flappy bird program/window
@@ -46,14 +46,17 @@ class FlappyBird:
         self.screen.fill((84, 86, 89))
         self.pipe_handler.render(self.screen)
         self.ai_handler.render(self.screen)
-        self.draw_generation()
+        self.draw_data()
         pygame.display.flip()
     
-    def draw_generation(self):
-        generation_text = self.default_font.render(f"generation: {self.ai_handler.generation}", True, (0, 0, 0))
+    def draw_data(self):
+        generation_text = self.default_font.render(f"generation: {self.ai_handler.generation}", True, BLACK)
+        alive_text = self.default_font.render(f"alive: {self.ai_handler.alive_ais()}", True, BLACK)
         self.screen.blit(generation_text, (20, 20))
+        self.screen.blit(alive_text, (20, 50))
 
     def is_running(self):
         return self.running
     
+   
    

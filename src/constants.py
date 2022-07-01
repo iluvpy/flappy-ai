@@ -7,4 +7,5 @@ PIPE_DISTANCE = 250 # distance between pipes
 PLAYER_SIZE = 30 # player width and height
 PLAYER_SPAWN_X = 300
 PLAYER_COLOR = (240, 240, 60)
+BLACK = (0, 0, 0)
 
