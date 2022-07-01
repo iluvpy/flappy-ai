@@ -28,6 +28,14 @@ class FlappyBird:
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 self.kb_handler.press(event.key)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4: 
+                    self.speed_multiplier += .1
+                if event.button == 5: 
+                    if self.speed_multiplier >= 1.1:
+                        self.speed_multiplier += -.1
+
+            
       
         self.kb_handler.update()
         self.pipe_handler.update(self.delta_time)
@@ -49,8 +57,10 @@ class FlappyBird:
     def draw_data(self):
         generation_text = self.default_font.render(f"generation: {self.ai_handler.generation}", True, BLACK)
         alive_text = self.default_font.render(f"alive: {self.ai_handler.alive_ais()}", True, BLACK)
+        speed_text = self.default_font.render(f"speed: x{self.speed_multiplier}", True, BLACK)
         self.screen.blit(generation_text, (20, 20))
         self.screen.blit(alive_text, (20, 50))
+        self.screen.blit(speed_text, (20, 80))
 
     def is_running(self):
         return self.running
