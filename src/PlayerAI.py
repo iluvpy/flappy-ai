@@ -1,7 +1,6 @@
  
 import random
 from pprint import pprint
-from typing import Union
 
 
 def get_random_weight() -> float:
@@ -27,7 +26,6 @@ class Node:
 
     # mutates the weights and biases slightly
     def mutate(self):
-        print("mutated node")
         for i in range(len(self.weights)):
             self.weights[i] += get_random_mutation()
         self.bias += get_random_mutation()

@@ -18,7 +18,7 @@ class FlappyBird:
         self.delta_time = 0
         self.ai_handler = AiHandler(1000)
         self.kb_handler = KeyboardHandler()
-    
+        self.default_font = pygame.font.SysFont("helvetica", 16)
         
 
     # handles events
@@ -46,7 +46,12 @@ class FlappyBird:
         self.screen.fill((84, 86, 89))
         self.pipe_handler.render(self.screen)
         self.ai_handler.render(self.screen)
+        self.draw_generation()
         pygame.display.flip()
+    
+    def draw_generation(self):
+        generation_text = self.default_font.render(f"generation: {self.ai_handler.generation}", True, (0, 0, 0))
+        self.screen.blit(generation_text, (20, 20))
 
     def is_running(self):
         return self.running

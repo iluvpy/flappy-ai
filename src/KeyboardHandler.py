@@ -11,7 +11,6 @@ class KeyboardHandler:
     def release(self, key: int):
         self.keys[key] = False
         self.last_released = key
-        print(key)
     
     def update(self):
         self.last_released = 0

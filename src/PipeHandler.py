@@ -20,7 +20,6 @@ class PipeHandler:
     def add_pipe(self):
         self.pipes.append(Pipe())
         self.last_pipe_added = time.perf_counter()
-        print("added pipe")
 
     def update(self, delta_time: float):
         i = 0
@@ -28,7 +27,6 @@ class PipeHandler:
             pipe.update(delta_time)
             if pipe.should_despawn():
                 del self.pipes[i]
-                print("removed pipe")
             i += 1
         # create a new pipe if the last created one is at least PIPE_DISTANCE away from the right window border
         if self.pipes[-1].x <= WINDOW_GEOMETRY[0]-PIPE_DISTANCE: 
