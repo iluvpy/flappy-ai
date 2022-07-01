@@ -5,24 +5,12 @@ from Player import Player
 from PlayerAI import PlayerAi
 import pygame
 import copy
-
-class DeathPoint:
-    player_ai: PlayerAi # the player ai that died
-    death_x: float # x position at player death
-    def __init__(self, player: Player) -> None:
-        self.death_x = player.x
-        self.player_ai = player.player_ai
-
-    def __gt__(self, other):
-        return self.death_x > other.death_x
-    
-    def __lt__(self, other):
-        return self.death_x < other.death_x
+import random
 
 class AiHandler:
     def __init__(self, player_amount: int) -> None:
         self.ai_players: List[Player] = []
-        self.death_points: List[DeathPoint] = [] # contains the death points 
+        self.last_deaths: List[Player] = [] # contains the death points 
         self.player_amount = player_amount
         self.generation = 0
         self.start_generation()
@@ -34,13 +22,13 @@ class AiHandler:
         player.set_ai(cpy_genes)
         return player
 
-    def start_generation(self, player_genes: PlayerAi = None):
+    def start_generation(self, player_genes: List[PlayerAi] = None):
         if player_genes is None:
             for _ in range(self.player_amount):
                 self.ai_players.append(Player(True))
         else:
             for _ in range(self.player_amount):
-                player = self.generate_mutated(player_genes)
+                player = self.generate_mutated(random.choice(player_genes))
                 self.ai_players.append(player)
         self.generation += 1
 
@@ -50,14 +38,16 @@ class AiHandler:
         while i < len(self.ai_players):
             self.ai_players[i].update(delta_time, kb_handler, pipe_handler)
             if self.ai_players[i].is_dead(pipe_handler):
-                self.death_points.append(DeathPoint(self.ai_players[i]))
+                self.last_deaths.append(self.ai_players[i])
+                if len(self.last_deaths) > 3:
+                    del self.last_deaths[0]
+                # remove player from list
                 del self.ai_players[i]
             i += 1
 
         if len(self.ai_players) == 0:
-            sorted_ai_players: List[DeathPoint] = sorted(self.death_points)
-            first = sorted_ai_players[0]
-            self.start_generation(first.player_ai)
+            genes = [player.player_ai for player in self.last_deaths]
+            self.start_generation(genes)
             return True
     
     def render(self, screen: pygame.Surface):
@@ -67,13 +57,3 @@ class AiHandler:
     def alive_ais(self) -> int:
         return len(self.ai_players)
     
-
-if __name__ == "__main__":
-    # testing
-    p1 = Player(False)
-    p1.x = 2
-    dp1 = DeathPoint(p1)
-    p2 = Player(False)
-    p2.x = 3
-    dp2 = DeathPoint(p2)
-    print(dp1 > dp2)

@@ -1,10 +1,8 @@
 import pygame
 from AiHandler import AiHandler
 from KeyboardHandler import KeyboardHandler
-from Pipe import Pipe
 import time
 from PipeHandler import PipeHandler
-from Player import Player
 from constants import BLACK, WINDOW_GEOMETRY
 pygame.init()
 
@@ -19,7 +17,7 @@ class FlappyBird:
         self.ai_handler = AiHandler(1000)
         self.kb_handler = KeyboardHandler()
         self.default_font = pygame.font.SysFont("helvetica", 16)
-        
+        self.speed_multiplier = 1
 
     # handles events
     def update(self):
@@ -30,16 +28,15 @@ class FlappyBird:
                 self.running = False
             if event.type == pygame.KEYDOWN:
                 self.kb_handler.press(event.key)
-            if event.type == pygame.KEYUP:
-                self.kb_handler.release(event.key)
-
-   
+      
         self.kb_handler.update()
         self.pipe_handler.update(self.delta_time)
         if self.ai_handler.update(self.delta_time, self.kb_handler, self.pipe_handler):
             self.pipe_handler.clean()
+  
+        
         end_time = time.perf_counter()   
-        self.delta_time = end_time-start_time
+        self.delta_time = (end_time-start_time)*self.speed_multiplier
         
     # renders everything on screen
     def render(self):
@@ -58,5 +55,4 @@ class FlappyBird:
     def is_running(self):
         return self.running
     
-   
    

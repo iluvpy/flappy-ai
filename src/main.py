@@ -1,5 +1,3 @@
-
-
 from FlappyBird import FlappyBird
 
 
