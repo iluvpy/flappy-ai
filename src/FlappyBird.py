@@ -1,4 +1,5 @@
 import pygame
+from AiHandler import AiHandler
 from KeyboardHandler import KeyboardHandler
 from Pipe import Pipe
 import time
@@ -15,8 +16,9 @@ class FlappyBird:
         pygame.display.set_caption("Flappy Bird")
         self.pipe_handler = PipeHandler()
         self.delta_time = 0
-        self.player = Player()
+        self.ai_handler = AiHandler(1000)
         self.kb_handler = KeyboardHandler()
+    
         
 
     # handles events
@@ -32,12 +34,10 @@ class FlappyBird:
                 self.kb_handler.release(event.key)
 
    
-
-        self.pipe_handler.update(self.delta_time)
-        self.player.update(self.delta_time, self.kb_handler)
         self.kb_handler.update()
-        print(self.player.is_dead(self.pipe_handler))
-        self.running = not self.player.is_dead(self.pipe_handler)
+        self.pipe_handler.update(self.delta_time)
+        if self.ai_handler.update(self.delta_time, self.kb_handler, self.pipe_handler):
+            self.pipe_handler.clean()
         end_time = time.perf_counter()   
         self.delta_time = end_time-start_time
         
@@ -45,8 +45,10 @@ class FlappyBird:
     def render(self):
         self.screen.fill((84, 86, 89))
         self.pipe_handler.render(self.screen)
-        self.player.render(self.screen)
+        self.ai_handler.render(self.screen)
         pygame.display.flip()
 
     def is_running(self):
         return self.running
+    
+   

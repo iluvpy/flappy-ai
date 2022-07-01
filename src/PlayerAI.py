@@ -1,9 +1,7 @@
-import math
-from tokenize import Number
-from typing import Any
-from Player import Player
+ 
 import random
 from pprint import pprint
+from typing import Union
 
 
 def get_random_weight() -> float:
@@ -13,25 +11,33 @@ def get_random_bias() -> float:
     return random.uniform(0.0, 3.0)
 
 # activation function
-def relu(x: Number) -> float:
+def relu(x: int | float) -> float:
     if x < 0:
         return 0
     return x
 
+def get_random_mutation() -> float:
+    return random.uniform(-1.5, 1.5)
 
 class Node:
     def __init__(self, value: float, connections: int) -> None:
         self.weights = [get_random_weight() for _ in range(connections)]
         self.bias = get_random_bias()
         self.value = value
-    
+
+    # mutates the weights and biases slightly
+    def mutate(self):
+        print("mutated node")
+        for i in range(len(self.weights)):
+            self.weights[i] += get_random_mutation()
+        self.bias += get_random_mutation()
+
     def print(self):
         pprint(f"weights: {self.weights}")
         pprint(f"bias: {self.bias}")
         pprint(f"value: {self.value}")
 
-class PlayerAi(Player):
-
+class PlayerAi():
     def __init__(self) -> None:
         super().__init__()
         self.layer1 = [Node(0, 3) for _ in range(5)]
@@ -56,6 +62,14 @@ class PlayerAi(Player):
             i += 1
         
         return relu(final) > 0
+    
+    # 50% chance to mutate the weights and biases slightly
+    def mutate(self):
+        if random.random() > .5:
+            for i in range(5):
+                self.layer1[i].mutate()
+            for i in range(3):
+                self.layer2[i].mutate()
 
 
 def main_test():

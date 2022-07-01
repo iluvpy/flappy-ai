@@ -38,3 +38,7 @@ class PipeHandler:
     def render(self, screen: pygame.Surface):
         for pipe in self.pipes:
             pipe.render(screen)
+
+    def clean(self):
+        self.pipes = []
+        self.add_pipe()
