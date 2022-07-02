@@ -16,7 +16,7 @@ def relu(x: int | float) -> float:
     return x
 
 def get_random_mutation() -> float:
-    return random.uniform(-1.5, 1.5)
+    return random.uniform(-.5, .5)
 
 class Node:
     def __init__(self, value: float, connections: int) -> None:

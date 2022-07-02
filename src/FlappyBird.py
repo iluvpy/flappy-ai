@@ -30,21 +30,22 @@ class FlappyBird:
                 self.kb_handler.press(event.key)
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 4: 
-                    self.speed_multiplier += .1
+                    if self.speed_multiplier < 10:
+                        self.speed_multiplier += 1
                 if event.button == 5: 
-                    if self.speed_multiplier >= 1.1:
-                        self.speed_multiplier += -.1
+                    if self.speed_multiplier >= 2:
+                        self.speed_multiplier += -1
 
+       
+        for _ in range(self.speed_multiplier):
+            self.kb_handler.update()
+            self.pipe_handler.update(self.delta_time)
+            if self.ai_handler.update(self.delta_time, self.kb_handler, self.pipe_handler):
+                self.pipe_handler.clean()
             
-      
-        self.kb_handler.update()
-        self.pipe_handler.update(self.delta_time)
-        if self.ai_handler.update(self.delta_time, self.kb_handler, self.pipe_handler):
-            self.pipe_handler.clean()
-  
-        
+
         end_time = time.perf_counter()   
-        self.delta_time = (end_time-start_time)*self.speed_multiplier
+        self.delta_time = (end_time-start_time)
         
     # renders everything on screen
     def render(self):
